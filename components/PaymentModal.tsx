@@ -1,0 +1,203 @@
+import React, { useState, useEffect } from 'react';
+import { X, CreditCard, Smartphone, Check, Copy, Loader2 } from 'lucide-react';
+import { Beat } from '../types';
+import { Button } from './Button';
+
+// CONFIGURATION
+const PAYPAL_EMAIL = "ardbeatz5@gmail.com";
+const MPESA_NUMBER = "+255769728869"; // Your M-Pesa number
+const MPESA_NAME = "ARDBEATZ"; // Name that appears on M-Pesa
+
+interface PaymentModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  beat: Beat | null;
+}
+
+export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, beat }) => {
+  const [method, setMethod] = useState<'paypal' | 'mpesa'>('mpesa');
+  const [copied, setCopied] = useState(false);
+  
+  // Verification State
+  const [transactionId, setTransactionId] = useState('');
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      // Reset state when modal opens
+      setPaymentSuccess(false);
+      setTransactionId('');
+      setIsVerifying(false);
+      setMethod('mpesa');
+    }
+  }, [isOpen]);
+
+  if (!isOpen || !beat) return null;
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(MPESA_NUMBER.replace('+', ''));
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleVerify = () => {
+    if (!transactionId.trim()) return;
+    
+    setIsVerifying(true);
+    
+    // Simulate backend verification delay
+    setTimeout(() => {
+      setIsVerifying(false);
+      setPaymentSuccess(true);
+    }, 2000);
+  };
+
+  // Construct PayPal Link
+  const paypalLink = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${PAYPAL_EMAIL}&item_name=${encodeURIComponent(beat.title + " (License)")}&amount=${beat.price}&currency_code=USD`;
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
+      
+      <div className="relative bg-ard-card border border-white/10 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up">
+        {/* Header */}
+        <div className="p-6 border-b border-white/10 flex justify-between items-center bg-ard-dark">
+          <div>
+            <h3 className="text-xl font-bold text-white">Checkout</h3>
+            <p className="text-sm text-gray-400">Buying license for <span className="text-ard-primary">{beat.title}</span></p>
+          </div>
+          <button onClick={onClose} className="text-gray-400 hover:text-white">
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="p-6">
+          {paymentSuccess ? (
+            <div className="text-center py-6 animate-fade-in">
+               <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                 <Check className="w-10 h-10 text-green-500" />
+               </div>
+               <h3 className="text-2xl font-bold text-white mb-2">Payment Verified!</h3>
+               <p className="text-gray-300 mb-6">
+                 Your transaction <b>{transactionId}</b> has been confirmed. 
+                 We've sent the download link for <b>{beat.title}</b> to your email.
+               </p>
+               <div className="bg-white/5 p-4 rounded-lg mb-6 text-sm text-gray-400">
+                  If you don't see the email within 5 minutes, please check your spam folder or contact support.
+               </div>
+               <Button onClick={onClose} className="w-full">
+                 Back to Store
+               </Button>
+            </div>
+          ) : (
+            <>
+              <div className="flex gap-4 mb-6">
+                <button
+                  onClick={() => setMethod('mpesa')}
+                  className={`flex-1 py-3 px-4 rounded-xl border flex flex-col items-center justify-center gap-2 transition-all ${
+                    method === 'mpesa' 
+                      ? 'bg-ard-primary/10 border-ard-primary text-white' 
+                      : 'bg-black/20 border-white/10 text-gray-400 hover:bg-white/5'
+                  }`}
+                >
+                  <Smartphone className="w-6 h-6" />
+                  <span className="font-semibold text-sm">M-Pesa</span>
+                </button>
+                <button
+                  onClick={() => setMethod('paypal')}
+                  className={`flex-1 py-3 px-4 rounded-xl border flex flex-col items-center justify-center gap-2 transition-all ${
+                    method === 'paypal' 
+                      ? 'bg-blue-500/10 border-blue-500 text-white' 
+                      : 'bg-black/20 border-white/10 text-gray-400 hover:bg-white/5'
+                  }`}
+                >
+                  <CreditCard className="w-6 h-6" />
+                  <span className="font-semibold text-sm">PayPal</span>
+                </button>
+              </div>
+
+              <div className="bg-black/30 rounded-xl p-6 border border-white/5">
+                {method === 'mpesa' ? (
+                  <div className="space-y-4">
+                    <div className="text-center mb-4">
+                      <p className="text-gray-400 text-sm mb-1">Send Payment to</p>
+                      <h4 className="text-2xl font-bold text-white tracking-wider flex items-center justify-center gap-2">
+                        {MPESA_NUMBER}
+                        <button onClick={handleCopy} className="p-1 hover:text-ard-primary transition-colors">
+                          {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+                        </button>
+                      </h4>
+                      <p className="text-xs text-ard-primary mt-1">Name: {MPESA_NAME}</p>
+                    </div>
+                    
+                    <div className="space-y-2 text-sm text-gray-300 bg-white/5 p-4 rounded-lg">
+                      <p><span className="text-ard-primary font-bold">1.</span> Go to M-Pesa Menu &gt; Lipa na M-Pesa</p>
+                      <p><span className="text-ard-primary font-bold">2.</span> Select Buy Goods / Send Money</p>
+                      <p><span className="text-ard-primary font-bold">3.</span> Enter Number: <span className="font-mono text-white">{MPESA_NUMBER}</span></p>
+                      <p><span className="text-ard-primary font-bold">4.</span> Amount: <span className="font-mono text-white">${beat.price}</span></p>
+                      <p><span className="text-ard-primary font-bold">5.</span> Enter PIN and Confirm</p>
+                    </div>
+
+                    <div className="pt-4 border-t border-white/10 mt-4">
+                      <label className="block text-sm font-medium text-gray-400 mb-2">Confirm Payment</label>
+                      <div className="space-y-3">
+                        <input 
+                            type="text" 
+                            value={transactionId}
+                            onChange={(e) => setTransactionId(e.target.value)}
+                            placeholder="Enter Transaction ID (e.g. QKD123456)"
+                            className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white focus:border-ard-primary focus:outline-none transition-colors uppercase"
+                        />
+                        <Button 
+                            onClick={handleVerify} 
+                            className="w-full"
+                            disabled={!transactionId.trim() || isVerifying}
+                        >
+                            {isVerifying ? (
+                              <span className="flex items-center">
+                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                Verifying...
+                              </span>
+                            ) : (
+                              'Verify Transaction'
+                            )}
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center space-y-6 py-4">
+                    <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto text-blue-400">
+                      <CreditCard className="w-8 h-8" />
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-bold text-white mb-2">Pay securely with PayPal</h4>
+                      <p className="text-gray-400 text-sm">You will be redirected to PayPal to complete your purchase of <b>${beat.price}</b>.</p>
+                    </div>
+                    <a 
+                      href={paypalLink} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center w-full bg-[#0070BA] hover:bg-[#005ea6] text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                    >
+                      Pay Now
+                    </a>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Footer */}
+        {!paymentSuccess && (
+          <div className="p-4 border-t border-white/10 bg-black/40 text-center">
+            <p className="text-xs text-gray-500">Secure payments handled by {method === 'mpesa' ? 'M-Pesa' : 'PayPal'}.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};

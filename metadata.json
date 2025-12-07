@@ -1,0 +1,7 @@
+{
+  "name": "ARDBEATZ",
+  "description": "Professional Music Production & WiFi Solutions Portfolio",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
