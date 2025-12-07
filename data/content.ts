@@ -1,4 +1,4 @@
-import { Project, ProjectType, Beat, BeatPack, WifiPlan } from '../types';
+import { Project, ProjectType, Beat, BeatPack, WifiPlan, TravelEntry } from '../types';
 
 // ==================================================================================
 // GENERAL SITE CONFIGURATION
@@ -11,7 +11,7 @@ export const SITE_CONFIG = {
   phoneRaw: "+255769728869", // For links (no spaces)
   location: "Dar es Salaam, Tanzania",
   payment: {
-    paypalEmail: "ardbeatz5@gmail.com",
+    paypalEmail: "edgichalluh5@yahoo.com",
     mpesaNumber: "+255769728869",
     mpesaName: "ARDBEATZ"
   },
@@ -218,5 +218,51 @@ export const WIFI_PLANS: WifiPlan[] = [
     price: 89, // Converted to number
     features: ['Unlimited Data', 'Fiber Optic Speeds', '24/7 Dedicated Support', 'Mesh System Included', 'Lowest Ping'],
     recommended: false
+  }
+];
+
+// ==================================================================================
+// TRAVEL & LIFESTYLE ENTRIES
+// ==================================================================================
+export const TRAVEL_ENTRIES: TravelEntry[] = [
+  {
+    id: 't1',
+    title: 'Serena Hotel Rooftop',
+    category: 'Hotel',
+    imageUrl: 'https://picsum.photos/seed/travel1/800/600',
+    location: 'Dar es Salaam, CBD',
+    description: 'Amazing sunset views and cocktails. The ambiance is perfect for evening relaxation after a studio session.',
+    date: 'Oct 2023',
+    rating: 5
+  },
+  {
+    id: 't2',
+    title: 'Samaki Samaki Seafood',
+    category: 'Food',
+    imageUrl: 'https://picsum.photos/seed/travel2/800/600',
+    location: 'Masaki',
+    description: 'Best grilled calamari in town. A must-visit for any food lover in Dar.',
+    date: 'Nov 2023',
+    rating: 4
+  },
+  {
+    id: 't3',
+    title: 'Zanzibar Weekend',
+    category: 'Travel',
+    imageUrl: 'https://picsum.photos/seed/travel3/800/600',
+    location: 'Nungwi, Zanzibar',
+    description: 'Crystal clear waters and white sands. Recharging creativity by the ocean.',
+    date: 'Dec 2023',
+    rating: 5
+  },
+  {
+    id: 't4',
+    title: 'Cape Town Studio Tour',
+    category: 'Travel',
+    imageUrl: 'https://picsum.photos/seed/travel4/800/600',
+    location: 'Cape Town, SA',
+    description: 'Visited some top-tier studios and connected with local producers. The music scene here is vibrant.',
+    date: 'Jan 2024',
+    rating: 5
   }
 ];

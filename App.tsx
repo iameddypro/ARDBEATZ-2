@@ -4,6 +4,7 @@ import { Hero } from './components/Hero';
 import { Portfolio } from './components/Portfolio';
 import { BeatStore } from './components/BeatStore';
 import { WifiSection } from './components/Wifi.tsx';
+import { Travel } from './components/Travel.tsx';
 import { Contact } from './components/Contact';
 import { ChatBot } from './components/ChatBot';
 import { CurrencyProvider } from './context/CurrencyContext';
@@ -20,6 +21,7 @@ function App() {
           <div className="bg-gradient-to-b from-ard-dark to-black">
             <WifiSection />
           </div>
+          <Travel />
           <Contact />
         </main>
         

@@ -57,3 +57,16 @@ export interface SocialLink {
   url: string;
   icon: string; // Icon name
 }
+
+export type TravelCategory = 'Hotel' | 'Food' | 'Travel' | 'Event';
+
+export interface TravelEntry {
+  id: string;
+  title: string;
+  category: TravelCategory;
+  imageUrl: string;
+  location: string;
+  description: string;
+  date: string;
+  rating?: number; // 1-5
+}

@@ -40,9 +40,9 @@ export const NavBar: React.FC = () => {
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-8">
-            <div className="flex items-baseline space-x-8">
-              {['Music', 'Store', 'WiFi', 'Contact'].map((item) => (
+          <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
+            <div className="flex items-baseline space-x-6 lg:space-x-8">
+              {['Music', 'Store', 'WiFi', 'Travel', 'Contact'].map((item) => (
                 <button
                   key={item}
                   onClick={() => scrollTo(item.toLowerCase())}
@@ -106,6 +106,7 @@ export const NavBar: React.FC = () => {
             <button onClick={() => scrollTo('music')} className="w-full text-left text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Music</button>
             <button onClick={() => scrollTo('store')} className="w-full text-left text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Store</button>
             <button onClick={() => scrollTo('wifi')} className="w-full text-left text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">WiFi</button>
+            <button onClick={() => scrollTo('travel')} className="w-full text-left text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Travel</button>
             <button onClick={() => scrollTo('contact')} className="w-full text-left text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Contact</button>
           </div>
         </div>
