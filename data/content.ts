@@ -13,7 +13,7 @@ export const SITE_CONFIG = {
   payment: {
     paypalEmail: "edgichalluh5@yahoo.com",
     mpesaNumber: "+255769728869",
-    mpesaName: "ARDBEATZ",
+    mpesaName: "Edward",
     whatsappNumber: "255769728869" // No '+' for wa.me links usually
   },
   socials: {
