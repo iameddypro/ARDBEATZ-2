@@ -26,6 +26,17 @@ export interface Beat {
   previewUrl?: string; // New field for audio preview
 }
 
+export interface BeatPack {
+  id: string;
+  title: string;
+  price: number;
+  originalPrice: number;
+  coverUrl: string;
+  description: string;
+  beatsIncluded: string[];
+  fileUrl?: string;
+}
+
 export interface WifiPlan {
   id: string;
   name: string;

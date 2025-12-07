@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, CreditCard, Smartphone, Check, Copy, Loader2, Download, ExternalLink } from 'lucide-react';
-import { Beat } from '../types';
+import { X, CreditCard, Smartphone, Check, Copy, Loader2, Download, ExternalLink, Package } from 'lucide-react';
+import { Beat, BeatPack } from '../types';
 import { Button } from './Button';
 
 // CONFIGURATION
@@ -11,10 +11,10 @@ const MPESA_NAME = "ARDBEATZ"; // Name that appears on M-Pesa
 interface PaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
-  beat: Beat | null;
+  product: Beat | BeatPack | null;
 }
 
-export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, beat }) => {
+export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, product }) => {
   const [method, setMethod] = useState<'paypal' | 'mpesa'>('mpesa');
   const [copied, setCopied] = useState(false);
   
@@ -22,6 +22,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, bea
   const [transactionId, setTransactionId] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+
+  const isPack = product && 'beatsIncluded' in product;
 
   useEffect(() => {
     if (isOpen) {
@@ -33,7 +35,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, bea
     }
   }, [isOpen]);
 
-  if (!isOpen || !beat) return null;
+  if (!isOpen || !product) return null;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(MPESA_NUMBER.replace('+', ''));
@@ -42,14 +44,22 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, bea
   };
 
   const triggerDownload = () => {
-    if (!beat) return;
-    const downloadUrl = beat.audioUrl || beat.previewUrl;
+    if (!product) return;
+    
+    let downloadUrl: string | undefined;
+    
+    if (isPack) {
+      downloadUrl = (product as BeatPack).fileUrl;
+    } else {
+      const beat = product as Beat;
+      downloadUrl = beat.audioUrl || beat.previewUrl;
+    }
     
     if (downloadUrl) {
       const link = document.createElement('a');
       link.href = downloadUrl;
-      link.download = `${beat.title.replace(/\s+/g, '_')}_ARDBEATZ.mp3`;
-      link.target = '_blank'; // Opens in new tab if download is blocked, safer for cross-origin
+      link.download = `${product.title.replace(/\s+/g, '_')}_ARDBEATZ${isPack ? '_PACK.zip' : '.mp3'}`;
+      link.target = '_blank';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -80,7 +90,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, bea
   };
 
   // Construct PayPal Link
-  const paypalLink = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${PAYPAL_EMAIL}&item_name=${encodeURIComponent(beat.title + " (License)")}&amount=${beat.price}&currency_code=USD`;
+  const itemName = isPack ? `Pack: ${product.title}` : `${product.title} (License)`;
+  const paypalLink = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${PAYPAL_EMAIL}&item_name=${encodeURIComponent(itemName)}&amount=${product.price}&currency_code=USD`;
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
@@ -91,7 +102,9 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, bea
         <div className="p-6 border-b border-white/10 flex justify-between items-center bg-ard-dark">
           <div>
             <h3 className="text-xl font-bold text-white">Checkout</h3>
-            <p className="text-sm text-gray-400">Buying license for <span className="text-ard-primary">{beat.title}</span></p>
+            <p className="text-sm text-gray-400">
+              {isPack ? 'Buying pack' : 'Buying license for'} <span className="text-ard-primary">{product.title}</span>
+            </p>
           </div>
           <button onClick={onClose} className="text-gray-400 hover:text-white">
             <X className="w-6 h-6" />
@@ -169,7 +182,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, bea
                       <p><span className="text-ard-primary font-bold">1.</span> Go to M-Pesa Menu &gt; Lipa na M-Pesa</p>
                       <p><span className="text-ard-primary font-bold">2.</span> Select Buy Goods / Send Money</p>
                       <p><span className="text-ard-primary font-bold">3.</span> Enter Number: <span className="font-mono text-white">{MPESA_NUMBER}</span></p>
-                      <p><span className="text-ard-primary font-bold">4.</span> Amount: <span className="font-mono text-white">${beat.price}</span></p>
+                      <p><span className="text-ard-primary font-bold">4.</span> Amount: <span className="font-mono text-white">${product.price}</span></p>
                       <p><span className="text-ard-primary font-bold">5.</span> Enter PIN and Confirm</p>
                     </div>
 
@@ -207,7 +220,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, bea
                     </div>
                     <div>
                       <h4 className="text-lg font-bold text-white mb-2">Pay securely with PayPal</h4>
-                      <p className="text-gray-400 text-sm">You will be redirected to PayPal to complete your purchase of <b>${beat.price}</b>.</p>
+                      <p className="text-gray-400 text-sm">You will be redirected to PayPal to complete your purchase of <b>${product.price}</b>.</p>
                     </div>
                     <div className="space-y-3">
                         <a 
