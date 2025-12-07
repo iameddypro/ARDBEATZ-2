@@ -1,3 +1,5 @@
+
+
 export enum ProjectType {
   PRODUCED = 'Produced',
   MIXED = 'Mixed',
@@ -37,13 +39,14 @@ export interface BeatPack {
   fileUrl?: string;
 }
 
-export interface WifiPlan {
+export interface ServicePackage {
   id: string;
-  name: string;
-  speed: string;
-  price: number; // Changed from string to number
+  title: string;
+  price: number;
+  description: string;
   features: string[];
-  recommended?: boolean;
+  deliveryTime: string;
+  popular?: boolean;
 }
 
 export interface ChatMessage {
@@ -69,4 +72,13 @@ export interface TravelEntry {
   description: string;
   date: string;
   rating?: number; // 1-5
+}
+
+export interface WifiPlan {
+  id: string;
+  name: string;
+  price: number;
+  speed: string;
+  features: string[];
+  recommended?: boolean;
 }

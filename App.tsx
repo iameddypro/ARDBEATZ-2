@@ -3,7 +3,8 @@ import { NavBar } from './components/NavBar';
 import { Hero } from './components/Hero';
 import { Portfolio } from './components/Portfolio';
 import { BeatStore } from './components/BeatStore';
-import { WifiSection } from './components/Wifi.tsx';
+import { Services } from './components/Services';
+import { SocialHub } from './components/SocialHub';
 import { Travel } from './components/Travel.tsx';
 import { Contact } from './components/Contact';
 import { ChatBot } from './components/ChatBot';
@@ -18,8 +19,9 @@ function App() {
           <Hero />
           <Portfolio />
           <BeatStore />
+          <Services />
           <div className="bg-gradient-to-b from-ard-dark to-black">
-            <WifiSection />
+            <SocialHub />
           </div>
           <Travel />
           <Contact />

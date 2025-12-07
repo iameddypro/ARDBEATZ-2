@@ -20,7 +20,7 @@ export const Contact: React.FC = () => {
   };
 
   return (
-    <Section id="contact" title="Get In Touch" subtitle="Ready to start your next project or upgrade your connection?">
+    <Section id="contact" title="Get In Touch" subtitle="Ready to start your next project? Let's make a hit.">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Contact Info */}
         <div className="space-y-8">
@@ -111,9 +111,9 @@ export const Contact: React.FC = () => {
                         onChange={e => setFormData({...formData, service: e.target.value})}
                         className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white focus:border-ard-primary focus:outline-none transition-colors"
                     >
-                        <option>Music Production</option>
+                        <option>Custom Beat Production</option>
                         <option>Mixing & Mastering</option>
-                        <option>WiFi Installation</option>
+                        <option>Executive Production</option>
                         <option>General Inquiry</option>
                     </select>
                 </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from './Button';
-import { PlayCircle, Wifi } from 'lucide-react';
+import { PlayCircle, Mic2 } from 'lucide-react';
 
 export const Hero: React.FC = () => {
   return (
@@ -20,7 +20,7 @@ export const Hero: React.FC = () => {
       <div className="relative z-10 text-center px-4 max-w-5xl mx-auto mt-16">
         <div className="inline-block px-4 py-1.5 mb-6 border border-ard-primary/30 rounded-full bg-ard-primary/10 backdrop-blur-sm">
           <span className="text-ard-primary font-semibold tracking-wider text-xs uppercase">
-            Sonic Perfection & connectivity
+            Sonic Perfection & Creativity
           </span>
         </div>
         
@@ -32,7 +32,7 @@ export const Hero: React.FC = () => {
         </h1>
         
         <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-          The ultimate hub for chart-topping music production, pristine mixing/mastering, and high-speed WiFi solutions for the modern creative.
+          The ultimate hub for chart-topping music production, pristine mixing/mastering, and professional audio services.
         </p>
         
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -47,10 +47,10 @@ export const Hero: React.FC = () => {
           <Button 
             variant="outline" 
             size="lg"
-            onClick={() => document.getElementById('wifi')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
           >
-            <Wifi className="w-5 h-5 mr-2" />
-            Get Connected
+            <Mic2 className="w-5 h-5 mr-2" />
+            View Services
           </Button>
         </div>
       </div>

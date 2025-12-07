@@ -1,4 +1,4 @@
-import { Project, ProjectType, Beat, BeatPack, WifiPlan, TravelEntry } from '../types';
+import { Project, ProjectType, Beat, BeatPack, ServicePackage, TravelEntry, WifiPlan } from '../types';
 
 // ==================================================================================
 // GENERAL SITE CONFIGURATION
@@ -24,12 +24,12 @@ export const SITE_CONFIG = {
   chatbot: {
     systemInstruction: `
       You are "ArdBot", the virtual studio assistant for the website "ARDBEATZ".
-      ARDBEATZ is a brand owned by a professional music producer, mixing/mastering engineer, and WiFi business owner.
+      ARDBEATZ is a brand owned by a professional music producer, mixing/mastering engineer.
 
       Your goal is to assist visitors with:
       1. Music Production: Suggesting lyrical rhymes, song concepts, or explaining mixing/mastering terms.
-      2. WiFi Services: Explaining basic internet troubleshooting or describing why high-speed internet is good for streaming music.
-      3. Engaging with the brand: Encouraging them to book a session or buy a WiFi plan.
+      2. Services: Explaining the custom beat, mixing, and mastering packages available.
+      3. Engaging with the brand: Encouraging them to book a session or follow on socials.
 
       Tone: Cool, professional, creative, slightly urban but polite.
       Keep answers concise (under 100 words) unless asked for lyrics.
@@ -193,32 +193,35 @@ export const PACKS: BeatPack[] = [
 ];
 
 // ==================================================================================
-// WIFI PLANS
+// SERVICES / PACKAGES
 // ==================================================================================
-export const WIFI_PLANS: WifiPlan[] = [
+export const SERVICES: ServicePackage[] = [
   {
-    id: 'basic',
-    name: 'Streamer Starter',
-    speed: '50 Mbps',
-    price: 29, // Converted to number
-    features: ['Unlimited Data', 'No Contracts', 'Standard Support', 'Ideal for Music Streaming'],
-    recommended: false
+    id: 'mix',
+    title: 'Mixing & Mastering',
+    price: 100,
+    description: 'Professional vocal mixing and mastering to industry standards.',
+    features: ['Vocal Tuning', 'EQ & Compression', 'Radio Ready Volume', '3 Revisions'],
+    deliveryTime: '2-3 Days',
+    popular: false
   },
   {
-    id: 'pro',
-    name: 'Studio Pro',
-    speed: '200 Mbps',
-    price: 49, // Converted to number
-    features: ['Unlimited Data', 'Low Latency for Collabs', 'Priority Support', 'Static IP Available', 'Free Installation'],
-    recommended: true
+    id: 'custom',
+    title: 'Custom Beat',
+    price: 250,
+    description: 'A bespoke instrumental tailored exclusively to your vision.',
+    features: ['Exclusive Rights', 'Stems Included', 'Unlimited Changes', 'Any Genre'],
+    deliveryTime: '5-7 Days',
+    popular: true
   },
   {
-    id: 'elite',
-    name: 'Master Grade',
-    speed: '1 Gbps',
-    price: 89, // Converted to number
-    features: ['Unlimited Data', 'Fiber Optic Speeds', '24/7 Dedicated Support', 'Mesh System Included', 'Lowest Ping'],
-    recommended: false
+    id: 'full',
+    title: 'Executive Production',
+    price: 500,
+    description: 'Full project supervision from beat to final master.',
+    features: ['Custom Production', 'Recording Guidance', 'Full Mix & Master', 'Release Strategy'],
+    deliveryTime: '14 Days',
+    popular: false
   }
 ];
 
@@ -265,5 +268,35 @@ export const TRAVEL_ENTRIES: TravelEntry[] = [
     description: 'Visited some top-tier studios and connected with local producers. The music scene here is vibrant.',
     date: 'Jan 2024',
     rating: 5
+  }
+];
+
+// ==================================================================================
+// WIFI PLANS
+// ==================================================================================
+export const WIFI_PLANS: WifiPlan[] = [
+  {
+    id: 'w1',
+    name: 'Home Basic',
+    price: 30,
+    speed: '10 Mbps',
+    features: ['Unlimited Browsing', 'Stable Connection', '24/7 Support'],
+    recommended: false
+  },
+  {
+    id: 'w2',
+    name: 'Streamer Pro',
+    price: 60,
+    speed: '50 Mbps',
+    features: ['Unlimited Data', '4K Streaming', 'Priority Support', 'Ideal for Gaming'],
+    recommended: true
+  },
+  {
+    id: 'w3',
+    name: 'Business Elite',
+    price: 100,
+    speed: '100 Mbps',
+    features: ['Dedicated IP', 'Fiber Connection', 'SLA Guarantee', 'Business Support'],
+    recommended: false
   }
 ];

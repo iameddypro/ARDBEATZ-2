@@ -28,6 +28,9 @@ export const NavBar: React.FC = () => {
     setCurrency(e.target.value as CurrencyCode);
   };
 
+  // Menu items
+  const menuItems = ['Music', 'Store', 'Services', 'Social', 'Travel', 'Contact'];
+
   return (
     <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-ard-dark/90 backdrop-blur-md border-b border-white/10' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -42,7 +45,7 @@ export const NavBar: React.FC = () => {
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
             <div className="flex items-baseline space-x-6 lg:space-x-8">
-              {['Music', 'Store', 'WiFi', 'Travel', 'Contact'].map((item) => (
+              {menuItems.map((item) => (
                 <button
                   key={item}
                   onClick={() => scrollTo(item.toLowerCase())}
@@ -103,11 +106,15 @@ export const NavBar: React.FC = () => {
       {isOpen && (
         <div className="md:hidden bg-ard-dark border-b border-gray-800">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <button onClick={() => scrollTo('music')} className="w-full text-left text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Music</button>
-            <button onClick={() => scrollTo('store')} className="w-full text-left text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Store</button>
-            <button onClick={() => scrollTo('wifi')} className="w-full text-left text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">WiFi</button>
-            <button onClick={() => scrollTo('travel')} className="w-full text-left text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Travel</button>
-            <button onClick={() => scrollTo('contact')} className="w-full text-left text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Contact</button>
+            {menuItems.map((item) => (
+              <button 
+                key={item}
+                onClick={() => scrollTo(item.toLowerCase())} 
+                className="w-full text-left text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+              >
+                {item}
+              </button>
+            ))}
           </div>
         </div>
       )}
