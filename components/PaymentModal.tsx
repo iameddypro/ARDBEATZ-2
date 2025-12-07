@@ -120,8 +120,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pro
                     <div className="w-12 h-12 rounded-full bg-green-600/20 flex items-center justify-center mb-3 group-hover:bg-green-600 group-hover:text-white transition-colors text-green-500">
                       <Smartphone className="w-6 h-6" />
                     </div>
-                    <span className="font-bold text-white">Mobile & Cards</span>
-                    <span className="text-xs text-gray-500 mt-1">PawaPay, PesaPal, M-Pesa</span>
+                    <span className="font-bold text-white">Mobile Money</span>
+                    <span className="text-xs text-gray-500 mt-1">M-Pesa</span>
                  </button>
                </div>
             </div>
@@ -184,23 +184,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pro
           {step === 'confirm' && method === 'mobile' && (
              <div className="space-y-6">
                 
-                {/* Gateways */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="p-3 bg-white/5 border border-white/10 rounded-lg text-center opacity-75 hover:opacity-100 cursor-pointer transition-all">
-                    <span className="font-bold text-blue-400 block mb-1">PawaPay</span>
-                    <span className="text-[10px] text-gray-500">Mobile Money Gateway</span>
-                  </div>
-                  <div className="p-3 bg-white/5 border border-white/10 rounded-lg text-center opacity-75 hover:opacity-100 cursor-pointer transition-all">
-                    <span className="font-bold text-blue-500 block mb-1">PesaPal</span>
-                    <span className="text-[10px] text-gray-500">Cards & Mobile</span>
-                  </div>
-                </div>
-
-                <div className="relative py-1">
-                    <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-white/10"></span></div>
-                    <div className="relative flex justify-center text-xs uppercase"><span className="bg-ard-card px-2 text-gray-500">Or Pay Directly</span></div>
-                </div>
-
                 {/* Direct Mobile */}
                 <div className="bg-green-500/10 p-4 rounded-lg border border-green-500/30">
                     <div className="flex items-center gap-3 mb-3">

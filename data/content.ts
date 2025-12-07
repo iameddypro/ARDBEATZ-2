@@ -48,7 +48,8 @@ export const PROJECTS: Project[] = [
     type: ProjectType.PRODUCED,
     coverUrl: 'https://picsum.photos/seed/music1/400/400',
     description: 'Synthwave production with deep bass and retro drums.',
-    releaseDate: '2023'
+    releaseDate: '2023',
+    biography: "Luna Ray is an emerging synthwave artist known for her nostalgic soundscapes and powerful vocals. Hailing from Miami, she blends 80s aesthetics with modern production techniques to create a unique auditory experience."
   },
   {
     id: '2',
@@ -57,7 +58,8 @@ export const PROJECTS: Project[] = [
     type: ProjectType.MIXED,
     coverUrl: 'https://picsum.photos/seed/music2/400/400',
     description: 'Complete mixdown for a 12-track Hip Hop album.',
-    releaseDate: '2023'
+    releaseDate: '2023',
+    biography: "The Collective is a diverse group of lyricists and producers from East London, pushing the boundaries of grime and hip-hop. Their collaborative approach brings raw energy and complex narratives to the forefront."
   },
   {
     id: '3',
@@ -66,7 +68,8 @@ export const PROJECTS: Project[] = [
     type: ProjectType.MASTERED,
     coverUrl: 'https://picsum.photos/seed/music3/400/400',
     description: 'Mastering for streaming platforms ensuring -14 LUFS compliance.',
-    releaseDate: '2024'
+    releaseDate: '2024',
+    biography: "Sarah is a singer-songwriter with a voice that captures the soul. Her acoustic sessions have garnered millions of views online, known for their intimate recording style and emotional depth."
   },
   {
     id: '4',
@@ -75,7 +78,8 @@ export const PROJECTS: Project[] = [
     type: ProjectType.PRODUCED,
     coverUrl: 'https://picsum.photos/seed/music4/400/400',
     description: 'High energy future bass instrumental pack.',
-    releaseDate: '2024'
+    releaseDate: '2024',
+    biography: "The in-house production team at ARDBEATZ focuses on genre-bending electronic music and high-energy festival tracks designed to make crowds move."
   },
   {
     id: '5',
@@ -84,7 +88,8 @@ export const PROJECTS: Project[] = [
     type: ProjectType.MIXED,
     coverUrl: 'https://picsum.photos/seed/music5/400/400',
     description: 'Vocal production and beat mixing.',
-    releaseDate: '2023'
+    releaseDate: '2023',
+    biography: "Lil Zenith is a rising trap star known for his melodic flows and hard-hitting 808s. Currently touring across Europe, he is defining the new wave of melodic trap."
   },
   {
     id: '6',
@@ -93,7 +98,8 @@ export const PROJECTS: Project[] = [
     type: ProjectType.MASTERED,
     coverUrl: 'https://picsum.photos/seed/music6/400/400',
     description: 'Stem mastering for cinematic trailer music.',
-    releaseDate: '2024'
+    releaseDate: '2024',
+    biography: "Void Walker is a cinematic composer specializing in dark, atmospheric soundscapes for film and video games. His work creates tension and emotion through meticulous sound design."
   },
 ];
 

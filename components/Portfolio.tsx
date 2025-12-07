@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import { Section } from './Section';
 import { ProjectType } from '../types';
-import { Play, Disc, Sliders, Mic2 } from 'lucide-react';
+import { Play, Disc, Sliders, Mic2, ChevronDown, ChevronUp } from 'lucide-react';
 import { PROJECTS } from '../data/content';
 
 export const Portfolio: React.FC = () => {
   const [filter, setFilter] = useState<ProjectType | 'All'>('All');
+  const [expandedBioId, setExpandedBioId] = useState<string | null>(null);
 
   const filteredProjects = filter === 'All' 
     ? PROJECTS 
     : PROJECTS.filter(p => p.type === filter);
+
+  const toggleBio = (id: string) => {
+    setExpandedBioId(prev => prev === id ? null : id);
+  };
 
   const getIcon = (type: ProjectType) => {
     switch (type) {
@@ -43,7 +48,7 @@ export const Portfolio: React.FC = () => {
         {filteredProjects.map((project) => (
           <div 
             key={project.id} 
-            className="group relative bg-ard-card rounded-2xl overflow-hidden border border-white/5 hover:border-ard-primary/50 transition-all duration-300 hover:shadow-2xl hover:shadow-ard-primary/20"
+            className="group relative bg-ard-card rounded-2xl overflow-hidden border border-white/5 hover:border-ard-primary/50 transition-all duration-300 hover:shadow-2xl hover:shadow-ard-primary/20 flex flex-col"
           >
             {/* Image */}
             <div className="relative aspect-square overflow-hidden">
@@ -60,7 +65,7 @@ export const Portfolio: React.FC = () => {
             </div>
 
             {/* Content */}
-            <div className="p-6">
+            <div className="p-6 flex flex-col flex-1">
               <div className="flex items-center justify-between mb-2">
                 <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ard-primary bg-ard-primary/10 px-2 py-1 rounded">
                   {getIcon(project.type)}
@@ -72,7 +77,27 @@ export const Portfolio: React.FC = () => {
                 {project.title}
               </h3>
               <p className="text-gray-400 text-sm mb-3">{project.artist}</p>
-              <p className="text-gray-500 text-sm line-clamp-2">{project.description}</p>
+              <p className="text-gray-500 text-sm line-clamp-2 mb-4">{project.description}</p>
+
+              {/* Biography Toggle */}
+              <div className="mt-auto pt-4 border-t border-white/5">
+                <button 
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        toggleBio(project.id);
+                    }}
+                    className="flex items-center text-xs font-bold text-ard-accent hover:text-white transition-colors uppercase tracking-wider focus:outline-none"
+                >
+                    {expandedBioId === project.id ? 'Hide Bio' : 'Artist Bio'}
+                    {expandedBioId === project.id ? <ChevronUp className="w-3 h-3 ml-1" /> : <ChevronDown className="w-3 h-3 ml-1" />}
+                </button>
+                
+                {expandedBioId === project.id && (
+                    <div className="mt-3 text-sm text-gray-400 leading-relaxed bg-black/20 p-3 rounded-lg border border-white/5 animate-pulse-slow">
+                        {project.biography || "Biography not available."}
+                    </div>
+                )}
+              </div>
             </div>
           </div>
         ))}

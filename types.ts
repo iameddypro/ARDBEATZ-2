@@ -14,6 +14,7 @@ export interface Project {
   coverUrl: string;
   description: string;
   releaseDate: string;
+  biography?: string;
 }
 
 export interface Beat {
