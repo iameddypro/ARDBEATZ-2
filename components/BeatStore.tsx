@@ -4,10 +4,11 @@ import { Button } from './Button';
 import { Play, Pause, ShoppingCart, Package, CheckCircle2 } from 'lucide-react';
 import { Beat, BeatPack } from '../types';
 import { PaymentModal } from './PaymentModal';
-import { BEATS, PACKS } from '../data/content';
+import { useData } from '../context/DataContext';
 import { useCurrency } from '../context/CurrencyContext';
 
 export const BeatStore: React.FC = () => {
+  const { beats, packs } = useData();
   const [playingId, setPlayingId] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Beat | BeatPack | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,7 +29,7 @@ export const BeatStore: React.FC = () => {
   }, []);
 
   const togglePlay = (id: string) => {
-    const beat = BEATS.find(b => b.id === id);
+    const beat = beats.find(b => b.id === id);
     if (!beat) return;
 
     // If clicking the currently playing beat, stop it
@@ -117,7 +118,7 @@ export const BeatStore: React.FC = () => {
 
             {/* Beat List */}
             <div className="divide-y divide-white/5">
-              {BEATS.map((beat) => (
+              {beats.map((beat) => (
                 <div 
                   key={beat.id} 
                   className={`group flex flex-col md:grid md:grid-cols-12 gap-4 p-4 items-center rounded-xl transition-all duration-300 border border-transparent hover:bg-white/5 hover:scale-[1.01] hover:shadow-lg hover:shadow-orange-500/10 hover:border-orange-500/40 hover:z-10 relative ${playingId === beat.id ? 'bg-ard-primary/10 border-ard-primary/30' : ''}`}
@@ -188,7 +189,7 @@ export const BeatStore: React.FC = () => {
           </>
         ) : (
           <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-            {PACKS.map((pack) => (
+            {packs.map((pack) => (
               <div key={pack.id} className="bg-black/20 border border-white/10 rounded-2xl overflow-hidden hover:border-ard-accent/50 hover:shadow-2xl hover:shadow-ard-accent/10 transition-all duration-300 flex flex-col group">
                 <div className="relative h-48 overflow-hidden">
                   <img src={pack.coverUrl} alt={pack.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />

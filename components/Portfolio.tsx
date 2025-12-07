@@ -2,15 +2,16 @@ import React, { useState } from 'react';
 import { Section } from './Section';
 import { ProjectType } from '../types';
 import { Play, Disc, Sliders, Mic2, ChevronDown, ChevronUp } from 'lucide-react';
-import { PROJECTS } from '../data/content';
+import { useData } from '../context/DataContext';
 
 export const Portfolio: React.FC = () => {
+  const { projects } = useData();
   const [filter, setFilter] = useState<ProjectType | 'All'>('All');
   const [expandedBioId, setExpandedBioId] = useState<string | null>(null);
 
   const filteredProjects = filter === 'All' 
-    ? PROJECTS 
-    : PROJECTS.filter(p => p.type === filter);
+    ? projects 
+    : projects.filter(p => p.type === filter);
 
   const toggleBio = (id: string) => {
     setExpandedBioId(prev => prev === id ? null : id);

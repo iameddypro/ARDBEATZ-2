@@ -83,3 +83,27 @@ export interface WifiPlan {
   features: string[];
   recommended?: boolean;
 }
+
+// CRM & Admin Types
+
+export interface ClientMessage {
+  id: string;
+  name: string;
+  email: string;
+  service: string;
+  message: string;
+  date: string;
+  status: 'New' | 'Replied' | 'Archived';
+}
+
+export interface Order {
+  id: string;
+  customerName: string; // Derived from contact or placeholder
+  productTitle: string;
+  amount: number;
+  date: string;
+  paymentMethod: 'PayPal' | 'M-Pesa';
+  transactionId?: string;
+  status: 'Verified' | 'Pending';
+  screenshotUrl?: string; // In a real app, this would be a file URL
+}

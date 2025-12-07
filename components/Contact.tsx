@@ -3,20 +3,34 @@ import { Section } from './Section';
 import { Button } from './Button';
 import { Mail, Phone, MapPin, Instagram, Youtube, Twitter } from 'lucide-react';
 import { SITE_CONFIG } from '../data/content';
+import { useData } from '../context/DataContext';
 
 export const Contact: React.FC = () => {
+  const { addMessage } = useData();
   const [formData, setFormData] = useState({ name: '', email: '', service: 'Music Production', message: '' });
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Add to CRM
+    addMessage({
+        id: Date.now().toString(),
+        name: formData.name,
+        email: formData.email,
+        service: formData.service,
+        message: formData.message,
+        date: new Date().toLocaleDateString(),
+        status: 'New'
+    });
+
     // Simulate submission
     setTimeout(() => {
         setSubmitted(true);
         setFormData({ name: '', email: '', service: 'Music Production', message: '' });
         // Reset success message after 5 seconds
         setTimeout(() => setSubmitted(false), 5000);
-    }, 1000);
+    }, 500);
   };
 
   return (

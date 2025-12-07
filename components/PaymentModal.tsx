@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { X, CreditCard, Check, Loader2, Download, ExternalLink, Smartphone, MessageCircle, Wallet } from 'lucide-react';
+import { X, CreditCard, Check, Loader2, Download, ExternalLink, Smartphone, MessageCircle, Wallet, AlertCircle } from 'lucide-react';
 import { Beat, BeatPack } from '../types';
 import { Button } from './Button';
 import { SITE_CONFIG } from '../data/content';
 import { useCurrency } from '../context/CurrencyContext';
+import { useData } from '../context/DataContext';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -16,10 +17,13 @@ type Step = 'select' | 'confirm' | 'success';
 
 export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, product }) => {
   const { currency, formatPrice } = useCurrency();
+  const { addOrder } = useData();
   
   const [method, setMethod] = useState<PaymentMethod>(null);
   const [step, setStep] = useState<Step>('select');
   const [isVerifying, setIsVerifying] = useState(false);
+  const [transactionId, setTransactionId] = useState('');
+  const [error, setError] = useState('');
 
   const isPack = product && 'beatsIncluded' in product;
 
@@ -29,6 +33,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pro
       setMethod(null);
       setStep('select');
       setIsVerifying(false);
+      setTransactionId('');
+      setError('');
     }
   }, [isOpen]);
 
@@ -57,12 +63,43 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pro
     }
   };
 
-  const handlePaymentComplete = () => {
+  const saveOrder = (method: 'PayPal' | 'M-Pesa', tid?: string) => {
+    addOrder({
+      id: tid || `PAY-${Date.now().toString().slice(-6)}`,
+      customerName: 'Guest User', // In real app, get from login
+      productTitle: product.title,
+      amount: product.price,
+      date: new Date().toLocaleDateString(),
+      paymentMethod: method,
+      transactionId: tid,
+      status: 'Verified', // Auto-verified for this demo flow
+    });
+  };
+
+  const handlePaypalComplete = () => {
     setIsVerifying(true);
     setTimeout(() => {
+      saveOrder('PayPal');
       setIsVerifying(false);
       setStep('success');
     }, 1500);
+  };
+
+  const handleVerifyMobilePayment = () => {
+    if (!transactionId || transactionId.length < 5) {
+      setError('Please enter a valid Transaction ID');
+      return;
+    }
+    
+    setError('');
+    setIsVerifying(true);
+    
+    // Simulate API verification delay
+    setTimeout(() => {
+      saveOrder('M-Pesa', transactionId);
+      setIsVerifying(false);
+      setStep('success');
+    }, 2000);
   };
 
   // Construct PayPal Link
@@ -70,7 +107,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pro
   const paypalLink = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${SITE_CONFIG.payment.paypalEmail}&item_name=${encodeURIComponent(itemName)}&amount=${product.price}&currency_code=USD`;
 
   // Construct WhatsApp Link
-  const whatsappMessage = `Hi, I have completed the payment for "${product.title}" (${formatPrice(product.price)}). Here is my payment screenshot. Please send me the download link.`;
+  const whatsappMessage = `Hi, I have completed the payment for "${product.title}" (${formatPrice(product.price)}). Transaction ID: ${transactionId}. Please send me the download link.`;
   const whatsappLink = `https://wa.me/${SITE_CONFIG.payment.whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 
   return (
@@ -120,8 +157,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pro
                     <div className="w-12 h-12 rounded-full bg-green-600/20 flex items-center justify-center mb-3 group-hover:bg-green-600 group-hover:text-white transition-colors text-green-500">
                       <Smartphone className="w-6 h-6" />
                     </div>
-                    <span className="font-bold text-white">Mobile Money</span>
-                    <span className="text-xs text-gray-500 mt-1">M-Pesa</span>
+                    <span className="font-bold text-white">M-Pesa</span>
+                    <span className="text-xs text-gray-500 mt-1">Mobile Money</span>
                  </button>
                </div>
             </div>
@@ -161,7 +198,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pro
 
                 <Button 
                     variant="outline"
-                    onClick={handlePaymentComplete} 
+                    onClick={handlePaypalComplete} 
                     disabled={isVerifying}
                     className="w-full"
                 >
@@ -184,44 +221,69 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pro
           {step === 'confirm' && method === 'mobile' && (
              <div className="space-y-6">
                 
-                {/* Direct Mobile */}
+                {/* Direct Mobile Details */}
                 <div className="bg-green-500/10 p-4 rounded-lg border border-green-500/30">
                     <div className="flex items-center gap-3 mb-3">
                        <div className="p-2 bg-green-600 rounded-full text-white">
                          <Smartphone className="w-4 h-4" />
                        </div>
-                       <h4 className="font-bold text-white">Direct Mobile Transfer</h4>
+                       <h4 className="font-bold text-white">M-Pesa Payment Details</h4>
                     </div>
                     
-                    <div className="space-y-3">
+                    <div className="space-y-3 mb-4">
                         <div className="flex justify-between items-center border-b border-white/5 pb-2">
-                          <span className="text-gray-400 text-sm">Network</span>
-                          <span className="text-white font-medium">M-Pesa / Vodacom</span>
-                        </div>
-                        <div className="flex justify-between items-center border-b border-white/5 pb-2">
-                          <span className="text-gray-400 text-sm">Number</span>
-                          <span className="text-white font-mono select-all">{SITE_CONFIG.payment.mpesaNumber}</span>
+                          <span className="text-gray-400 text-sm">Send to Number</span>
+                          <span className="text-white font-mono select-all text-lg">{SITE_CONFIG.payment.mpesaNumber}</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-gray-400 text-sm">Name</span>
+                          <span className="text-gray-400 text-sm">Recipient Name</span>
                           <span className="text-white font-medium">{SITE_CONFIG.payment.mpesaName}</span>
                         </div>
                     </div>
+                    
+                    <div className="text-xs text-green-200 bg-green-900/30 p-3 rounded border border-green-500/20 leading-relaxed">
+                        1. Go to M-Pesa Menu<br/>
+                        2. Select "Send Money"<br/>
+                        3. Enter Number: <b>{SITE_CONFIG.payment.mpesaNumber}</b><br/>
+                        4. Enter Amount: <b>{formatPrice(product.price)}</b><br/>
+                        5. Copy the <b>Transaction ID</b> received in the SMS
+                    </div>
+                </div>
+
+                {/* Verification Input */}
+                <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-300">Enter Confirmation Code</label>
+                    <input 
+                        type="text" 
+                        value={transactionId}
+                        onChange={(e) => {
+                            setTransactionId(e.target.value.toUpperCase());
+                            setError('');
+                        }}
+                        placeholder="e.g. QK85..."
+                        className={`w-full bg-black/40 border ${error ? 'border-red-500' : 'border-white/20'} rounded-lg p-3 text-white placeholder-gray-600 focus:outline-none focus:ring-1 ${error ? 'focus:ring-red-500' : 'focus:ring-green-500'} transition-all font-mono uppercase tracking-wide`}
+                    />
+                    {error && (
+                        <div className="flex items-center text-xs text-red-500 animate-fade-in">
+                            <AlertCircle className="w-3 h-3 mr-1" />
+                            {error}
+                        </div>
+                    )}
                 </div>
 
                 <Button 
                     variant="primary"
-                    onClick={handlePaymentComplete} 
-                    disabled={isVerifying}
-                    className="w-full"
+                    onClick={handleVerifyMobilePayment} 
+                    disabled={isVerifying || !transactionId}
+                    className="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 shadow-green-500/20"
                 >
                       {isVerifying ? (
                         <span className="flex items-center">
                           <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          Processing...
+                          Verifying...
                         </span>
                       ) : (
-                        'I have sent the money'
+                        'Verify Payment'
                       )}
                 </Button>
 
@@ -233,46 +295,33 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pro
 
           {step === 'success' && (
             <div className="text-center py-4 space-y-6 animate-fade-in">
-               <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto">
+               <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto border-2 border-green-500/30">
                  <Check className="w-10 h-10 text-green-500" />
                </div>
                
                <div>
-                  <h3 className="text-2xl font-bold text-white mb-2">Payment Recorded!</h3>
+                  <h3 className="text-2xl font-bold text-white mb-2">Payment Verified!</h3>
                   <p className="text-gray-300 text-sm">
-                    To instantly receive your beat/pack, please complete the final verification step below.
+                    Thank you for your purchase. Your transaction has been confirmed successfully.
                   </p>
                </div>
                
-               <div className="bg-ard-primary/10 border border-ard-primary/30 p-4 rounded-xl text-left space-y-3">
-                  <div className="flex items-start gap-3">
-                     <MessageCircle className="w-5 h-5 text-ard-primary mt-0.5 flex-shrink-0" />
-                     <div>
-                        <h4 className="font-bold text-white text-sm">Required: Send Screenshot</h4>
-                        <p className="text-xs text-gray-400 mt-1">
-                          Click the button below to open WhatsApp and send us a screenshot of your payment. We will verify it instantly.
-                        </p>
-                     </div>
-                  </div>
-                  <a 
-                    href={whatsappLink}
-                    target="_blank"
-                    rel="noopener noreferrer" 
-                    className="flex items-center justify-center w-full bg-[#25D366] hover:bg-[#20bd5a] text-black font-bold py-3 px-4 rounded-lg transition-colors"
-                  >
-                    <MessageCircle className="w-4 h-4 mr-2" />
-                    Send Screenshot to WhatsApp
-                  </a>
-               </div>
+               {method === 'mobile' && (
+                   <div className="bg-white/5 border border-white/10 p-4 rounded-xl text-left">
+                       <p className="text-xs text-gray-500 uppercase mb-1">Transaction ID</p>
+                       <p className="font-mono text-lg text-white tracking-widest">{transactionId}</p>
+                   </div>
+               )}
                
-               <div className="pt-4 border-t border-white/10">
-                 <p className="text-xs text-gray-500 mb-3">
-                   Link already verified? Download directly below:
-                 </p>
-                 <Button onClick={triggerDownload} className="w-full flex items-center justify-center gap-2" variant="ghost">
+               <div className="pt-4 border-t border-white/10 space-y-3">
+                 <Button onClick={triggerDownload} className="w-full flex items-center justify-center gap-2 py-4 bg-ard-primary hover:bg-red-600 text-white">
                    <Download className="w-5 h-5" />
-                   Download File
+                   Download Now
                  </Button>
+                 
+                 <div className="text-xs text-gray-500 mt-4">
+                    Having trouble? <a href={whatsappLink} target="_blank" rel="noreferrer" className="text-ard-primary hover:underline">Contact Support</a>
+                 </div>
                </div>
             </div>
           )}
