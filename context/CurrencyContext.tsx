@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-export type CurrencyCode = 'USD' | 'TZS' | 'KES' | 'UGX' | 'GHS';
+export type CurrencyCode = 'USD' | 'TZS' | 'KES' | 'UGX' | 'GHS' | 'NGN' | 'BWP';
 
 interface CurrencyContextType {
   currency: CurrencyCode;
@@ -20,6 +20,8 @@ const RATES: Record<CurrencyCode, number> = {
   KES: 130,  // Kenyan Shilling
   UGX: 3700, // Ugandan Shilling
   GHS: 16,   // Ghanaian Cedi
+  NGN: 1650, // Nigerian Naira
+  BWP: 13.5, // Botswana Pula
 };
 
 const SYMBOLS: Record<CurrencyCode, string> = {
@@ -28,6 +30,8 @@ const SYMBOLS: Record<CurrencyCode, string> = {
   KES: 'KSh ',
   UGX: 'USh ',
   GHS: '₵',
+  NGN: '₦',
+  BWP: 'P',
 };
 
 export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -41,7 +45,9 @@ export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const converted = convertPrice(priceInUsd);
     
     // For TZS, UGX, KES, usually don't use decimals for large numbers
-    const shouldHaveDecimals = currency === 'USD' || currency === 'GHS';
+    // NGN, GHS, BWP usually use decimals
+    const noDecimals = ['TZS', 'UGX', 'KES'];
+    const shouldHaveDecimals = !noDecimals.includes(currency);
     
     const formattedNumber = new Intl.NumberFormat('en-US', {
       minimumFractionDigits: shouldHaveDecimals ? 2 : 0,

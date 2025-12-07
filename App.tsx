@@ -4,6 +4,7 @@ import { Hero } from './components/Hero';
 import { Portfolio } from './components/Portfolio';
 import { BeatStore } from './components/BeatStore';
 import { Services } from './components/Services';
+import { WifiSection } from './components/Wifi';
 import { SocialHub } from './components/SocialHub';
 import { Travel } from './components/Travel.tsx';
 import { Contact } from './components/Contact';
@@ -49,6 +50,7 @@ function App() {
             <Portfolio />
             <BeatStore />
             <Services />
+            <WifiSection />
             <div className="bg-gradient-to-b from-ard-dark to-black">
               <SocialHub />
             </div>

@@ -69,6 +69,8 @@ export const NavBar: React.FC = () => {
                 <option value="KES" className="bg-ard-dark">KES (KSh)</option>
                 <option value="UGX" className="bg-ard-dark">UGX (USh)</option>
                 <option value="GHS" className="bg-ard-dark">GHS (₵)</option>
+                <option value="NGN" className="bg-ard-dark">NGN (₦)</option>
+                <option value="BWP" className="bg-ard-dark">BWP (P)</option>
               </select>
             </div>
 
@@ -90,6 +92,8 @@ export const NavBar: React.FC = () => {
                 <option value="KES" className="bg-ard-dark">KES</option>
                 <option value="UGX" className="bg-ard-dark">UGX</option>
                 <option value="GHS" className="bg-ard-dark">GHS</option>
+                <option value="NGN" className="bg-ard-dark">NGN</option>
+                <option value="BWP" className="bg-ard-dark">BWP</option>
               </select>
 
             <button

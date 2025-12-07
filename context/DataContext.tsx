@@ -20,13 +20,24 @@ interface DataContextType {
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Initialize with static data, but allow state mutations
-  const [projects, setProjects] = useState<Project[]>(INITIAL_PROJECTS);
-  const [beats, setBeats] = useState<Beat[]>(INITIAL_BEATS);
-  const [packs, setPacks] = useState<BeatPack[]>(INITIAL_PACKS);
+  // Helper to initialize state from localStorage or fallback to default
+  const getSavedData = <T,>(key: string, fallback: T): T => {
+    try {
+      const saved = localStorage.getItem(key);
+      return saved ? JSON.parse(saved) : fallback;
+    } catch (e) {
+      console.warn(`Error reading ${key} from localStorage`, e);
+      return fallback;
+    }
+  };
+
+  // Initialize with persisted data
+  const [projects, setProjects] = useState<Project[]>(() => getSavedData('ard_projects', INITIAL_PROJECTS));
+  const [beats, setBeats] = useState<Beat[]>(() => getSavedData('ard_beats', INITIAL_BEATS));
+  const [packs, setPacks] = useState<BeatPack[]>(() => getSavedData('ard_packs', INITIAL_PACKS));
   
   // Mock Initial CRM Data
-  const [messages, setMessages] = useState<ClientMessage[]>([
+  const [messages, setMessages] = useState<ClientMessage[]>(() => getSavedData('ard_messages', [
     {
       id: 'm1',
       name: 'John Doe',
@@ -45,10 +56,10 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       date: '2023-10-22',
       status: 'Replied'
     }
-  ]);
+  ]));
 
   // Mock Initial Orders
-  const [orders, setOrders] = useState<Order[]>([
+  const [orders, setOrders] = useState<Order[]>(() => getSavedData('ard_orders', [
     {
       id: 'ord-123',
       customerName: 'Anonymous Client',
@@ -59,7 +70,14 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       transactionId: 'QK857291',
       status: 'Verified'
     }
-  ]);
+  ]));
+
+  // Effects to save data whenever it changes
+  useEffect(() => localStorage.setItem('ard_projects', JSON.stringify(projects)), [projects]);
+  useEffect(() => localStorage.setItem('ard_beats', JSON.stringify(beats)), [beats]);
+  useEffect(() => localStorage.setItem('ard_packs', JSON.stringify(packs)), [packs]);
+  useEffect(() => localStorage.setItem('ard_messages', JSON.stringify(messages)), [messages]);
+  useEffect(() => localStorage.setItem('ard_orders', JSON.stringify(orders)), [orders]);
 
   const addProject = (project: Project) => {
     setProjects(prev => [project, ...prev]);
