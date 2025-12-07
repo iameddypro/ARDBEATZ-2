@@ -26,7 +26,7 @@ export const Hero: React.FC = () => {
         
         <h1 className="text-6xl md:text-8xl font-display font-bold mb-6 tracking-tighter text-white">
           AMPLIFY YOUR <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-ard-primary via-purple-400 to-ard-secondary">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-ard-primary via-orange-500 to-ard-secondary">
             VISION
           </span>
         </h1>
