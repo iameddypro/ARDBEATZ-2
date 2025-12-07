@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Section } from './Section';
 import { Button } from './Button';
 import { Mail, Phone, MapPin, Instagram, Youtube, Twitter } from 'lucide-react';
+import { SITE_CONFIG } from '../data/content';
 
 export const Contact: React.FC = () => {
   const [formData, setFormData] = useState({ name: '', email: '', service: 'Music Production', message: '' });
@@ -32,7 +33,7 @@ export const Contact: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-1">Email</h4>
-                  <a href="mailto:ardbeatz5@gmail.com" className="text-white hover:text-ard-primary transition-colors">ardbeatz5@gmail.com</a>
+                  <a href={`mailto:${SITE_CONFIG.email}`} className="text-white hover:text-ard-primary transition-colors">{SITE_CONFIG.email}</a>
                 </div>
               </div>
               
@@ -42,7 +43,7 @@ export const Contact: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-1">Phone / M-Pesa</h4>
-                  <a href="tel:+255769728869" className="text-white hover:text-ard-secondary transition-colors">+255 769 728 869</a>
+                  <a href={`tel:${SITE_CONFIG.phoneRaw}`} className="text-white hover:text-ard-secondary transition-colors">{SITE_CONFIG.phone}</a>
                 </div>
               </div>
 
@@ -52,22 +53,22 @@ export const Contact: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-1">Studio</h4>
-                  <p className="text-white">Dar es Salaam, Tanzania</p>
+                  <p className="text-white">{SITE_CONFIG.location}</p>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="bg-ard-card p-8 rounded-2xl border border-white/5">
-            <h3 className="text-xl font-bold mb-6 text-white">Follow ARDBEATZ</h3>
+            <h3 className="text-xl font-bold mb-6 text-white">Follow {SITE_CONFIG.title}</h3>
             <div className="flex gap-4">
-              <a href="#" className="p-4 bg-white/5 rounded-lg hover:bg-pink-600 hover:text-white transition-all duration-300 group">
+              <a href={SITE_CONFIG.socials.instagram} target="_blank" rel="noreferrer" className="p-4 bg-white/5 rounded-lg hover:bg-pink-600 hover:text-white transition-all duration-300 group">
                 <Instagram className="w-6 h-6 text-gray-400 group-hover:text-white" />
               </a>
-              <a href="#" className="p-4 bg-white/5 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 group">
+              <a href={SITE_CONFIG.socials.youtube} target="_blank" rel="noreferrer" className="p-4 bg-white/5 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 group">
                 <Youtube className="w-6 h-6 text-gray-400 group-hover:text-white" />
               </a>
-              <a href="#" className="p-4 bg-white/5 rounded-lg hover:bg-blue-400 hover:text-white transition-all duration-300 group">
+              <a href={SITE_CONFIG.socials.twitter} target="_blank" rel="noreferrer" className="p-4 bg-white/5 rounded-lg hover:bg-blue-400 hover:text-white transition-all duration-300 group">
                 <Twitter className="w-6 h-6 text-gray-400 group-hover:text-white" />
               </a>
             </div>

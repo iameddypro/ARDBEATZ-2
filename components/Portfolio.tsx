@@ -1,64 +1,8 @@
 import React, { useState } from 'react';
 import { Section } from './Section';
-import { Project, ProjectType } from '../types';
+import { ProjectType } from '../types';
 import { Play, Disc, Sliders, Mic2 } from 'lucide-react';
-
-const PROJECTS: Project[] = [
-  {
-    id: '1',
-    title: 'Neon Nights',
-    artist: 'Luna Ray',
-    type: ProjectType.PRODUCED,
-    coverUrl: 'https://picsum.photos/seed/music1/400/400',
-    description: 'Synthwave production with deep bass and retro drums.',
-    releaseDate: '2023'
-  },
-  {
-    id: '2',
-    title: 'Urban Jungle',
-    artist: 'The Collective',
-    type: ProjectType.MIXED,
-    coverUrl: 'https://picsum.photos/seed/music2/400/400',
-    description: 'Complete mixdown for a 12-track Hip Hop album.',
-    releaseDate: '2023'
-  },
-  {
-    id: '3',
-    title: 'Acoustic Soul',
-    artist: 'Sarah Jenkins',
-    type: ProjectType.MASTERED,
-    coverUrl: 'https://picsum.photos/seed/music3/400/400',
-    description: 'Mastering for streaming platforms ensuring -14 LUFS compliance.',
-    releaseDate: '2024'
-  },
-  {
-    id: '4',
-    title: 'Future Bass Vol. 1',
-    artist: 'ARDBEATZ Exclusives',
-    type: ProjectType.PRODUCED,
-    coverUrl: 'https://picsum.photos/seed/music4/400/400',
-    description: 'High energy future bass instrumental pack.',
-    releaseDate: '2024'
-  },
-    {
-    id: '5',
-    title: 'Trap Anthem',
-    artist: 'Lil Zenith',
-    type: ProjectType.MIXED,
-    coverUrl: 'https://picsum.photos/seed/music5/400/400',
-    description: 'Vocal production and beat mixing.',
-    releaseDate: '2023'
-  },
-  {
-    id: '6',
-    title: 'Ethereal',
-    artist: 'Void Walker',
-    type: ProjectType.MASTERED,
-    coverUrl: 'https://picsum.photos/seed/music6/400/400',
-    description: 'Stem mastering for cinematic trailer music.',
-    releaseDate: '2024'
-  },
-];
+import { PROJECTS } from '../data/content';
 
 export const Portfolio: React.FC = () => {
   const [filter, setFilter] = useState<ProjectType | 'All'>('All');

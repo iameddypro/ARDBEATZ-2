@@ -2,11 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, CreditCard, Smartphone, Check, Copy, Loader2, Download, ExternalLink, Package } from 'lucide-react';
 import { Beat, BeatPack } from '../types';
 import { Button } from './Button';
-
-// CONFIGURATION
-const PAYPAL_EMAIL = "ardbeatz5@gmail.com";
-const MPESA_NUMBER = "+255769728869"; // Your M-Pesa number
-const MPESA_NAME = "ARDBEATZ"; // Name that appears on M-Pesa
+import { SITE_CONFIG } from '../data/content';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -38,7 +34,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pro
   if (!isOpen || !product) return null;
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(MPESA_NUMBER.replace('+', ''));
+    navigator.clipboard.writeText(SITE_CONFIG.payment.mpesaNumber.replace('+', ''));
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -91,7 +87,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pro
 
   // Construct PayPal Link
   const itemName = isPack ? `Pack: ${product.title}` : `${product.title} (License)`;
-  const paypalLink = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${PAYPAL_EMAIL}&item_name=${encodeURIComponent(itemName)}&amount=${product.price}&currency_code=USD`;
+  const paypalLink = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${SITE_CONFIG.payment.paypalEmail}&item_name=${encodeURIComponent(itemName)}&amount=${product.price}&currency_code=USD`;
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
@@ -170,18 +166,18 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pro
                     <div className="text-center mb-4">
                       <p className="text-gray-400 text-sm mb-1">Send Payment to</p>
                       <h4 className="text-2xl font-bold text-white tracking-wider flex items-center justify-center gap-2">
-                        {MPESA_NUMBER}
+                        {SITE_CONFIG.payment.mpesaNumber}
                         <button onClick={handleCopy} className="p-1 hover:text-ard-primary transition-colors">
                           {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
                         </button>
                       </h4>
-                      <p className="text-xs text-ard-primary mt-1">Name: {MPESA_NAME}</p>
+                      <p className="text-xs text-ard-primary mt-1">Name: {SITE_CONFIG.payment.mpesaName}</p>
                     </div>
                     
                     <div className="space-y-2 text-sm text-gray-300 bg-white/5 p-4 rounded-lg">
                       <p><span className="text-ard-primary font-bold">1.</span> Go to M-Pesa Menu &gt; Lipa na M-Pesa</p>
                       <p><span className="text-ard-primary font-bold">2.</span> Select Buy Goods / Send Money</p>
-                      <p><span className="text-ard-primary font-bold">3.</span> Enter Number: <span className="font-mono text-white">{MPESA_NUMBER}</span></p>
+                      <p><span className="text-ard-primary font-bold">3.</span> Enter Number: <span className="font-mono text-white">{SITE_CONFIG.payment.mpesaNumber}</span></p>
                       <p><span className="text-ard-primary font-bold">4.</span> Amount: <span className="font-mono text-white">${product.price}</span></p>
                       <p><span className="text-ard-primary font-bold">5.</span> Enter PIN and Confirm</p>
                     </div>

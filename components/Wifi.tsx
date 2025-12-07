@@ -2,40 +2,13 @@ import React from 'react';
 import { Section } from './Section';
 import { Button } from './Button';
 import { Wifi, Check, Zap } from 'lucide-react';
-import { WifiPlan } from '../types';
-
-const PLANS: WifiPlan[] = [
-  {
-    id: 'basic',
-    name: 'Streamer Starter',
-    speed: '50 Mbps',
-    price: '$29',
-    features: ['Unlimited Data', 'No Contracts', 'Standard Support', 'Ideal for Music Streaming'],
-    recommended: false
-  },
-  {
-    id: 'pro',
-    name: 'Studio Pro',
-    speed: '200 Mbps',
-    price: '$49',
-    features: ['Unlimited Data', 'Low Latency for Collabs', 'Priority Support', 'Static IP Available', 'Free Installation'],
-    recommended: true
-  },
-  {
-    id: 'elite',
-    name: 'Master Grade',
-    speed: '1 Gbps',
-    price: '$89',
-    features: ['Unlimited Data', 'Fiber Optic Speeds', '24/7 Dedicated Support', 'Mesh System Included', 'Lowest Ping'],
-    recommended: false
-  }
-];
+import { WIFI_PLANS } from '../data/content';
 
 export const WifiSection: React.FC = () => {
   return (
     <Section id="wifi" title="ARDBEATZ Connect" subtitle="High-speed internet solutions tailored for creators and businesses." darker>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {PLANS.map((plan) => (
+        {WIFI_PLANS.map((plan) => (
           <div 
             key={plan.id} 
             className={`relative p-8 rounded-2xl border transition-all duration-300 flex flex-col ${
