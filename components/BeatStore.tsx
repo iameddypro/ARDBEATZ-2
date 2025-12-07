@@ -1,16 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Section } from './Section';
 import { Button } from './Button';
-import { Play, Pause, ShoppingCart, Music2, Tag, Package, CheckCircle2 } from 'lucide-react';
+import { Play, Pause, ShoppingCart, Package, CheckCircle2 } from 'lucide-react';
 import { Beat, BeatPack } from '../types';
 import { PaymentModal } from './PaymentModal';
 import { BEATS, PACKS } from '../data/content';
+import { useCurrency } from '../context/CurrencyContext';
 
 export const BeatStore: React.FC = () => {
   const [playingId, setPlayingId] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Beat | BeatPack | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'beats' | 'packs'>('beats');
+  const { formatPrice } = useCurrency();
   
   // Audio Playback Ref
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -169,13 +171,13 @@ export const BeatStore: React.FC = () => {
 
                   {/* Price & Action */}
                   <div className="col-span-2 w-full flex items-center justify-between md:justify-end gap-4 mt-4 md:mt-0">
-                    <span className="md:hidden text-xl font-bold text-white">${beat.price}</span>
+                    <span className="md:hidden text-xl font-bold text-white">{formatPrice(beat.price)}</span>
                     <Button 
                       size="sm" 
                       onClick={() => openBuyModal(beat)}
                       className="w-full md:w-auto min-w-[100px] group-hover:from-ard-accent group-hover:to-orange-600 group-hover:shadow-orange-500/30"
                     >
-                      <span className="hidden md:inline mr-2">${beat.price}</span>
+                      <span className="hidden md:inline mr-2">{formatPrice(beat.price)}</span>
                       <span className="md:hidden mr-2">Buy Now</span>
                       <ShoppingCart className="w-4 h-4" />
                     </Button>
@@ -213,8 +215,8 @@ export const BeatStore: React.FC = () => {
                   
                   <div className="flex items-center justify-between pt-6 border-t border-white/5">
                     <div className="flex flex-col">
-                       <span className="text-xs text-gray-500 line-through">${pack.originalPrice}</span>
-                       <span className="text-2xl font-bold text-ard-primary">${pack.price}</span>
+                       <span className="text-xs text-gray-500 line-through">{formatPrice(pack.originalPrice)}</span>
+                       <span className="text-2xl font-bold text-ard-primary">{formatPrice(pack.price)}</span>
                     </div>
                     <Button onClick={() => openBuyModal(pack)} className="group-hover:from-ard-accent group-hover:to-orange-600 group-hover:shadow-orange-500/30">
                       Buy Pack

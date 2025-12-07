@@ -41,7 +41,7 @@ export interface WifiPlan {
   id: string;
   name: string;
   speed: string;
-  price: string;
+  price: number; // Changed from string to number
   features: string[];
   recommended?: boolean;
 }

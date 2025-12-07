@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Music, Wifi, Mail } from 'lucide-react';
+import { Menu, X, Globe } from 'lucide-react';
 import { Button } from './Button';
+import { useCurrency, CurrencyCode } from '../context/CurrencyContext';
 
 export const NavBar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { currency, setCurrency } = useCurrency();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,6 +24,10 @@ export const NavBar: React.FC = () => {
     }
   };
 
+  const handleCurrencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setCurrency(e.target.value as CurrencyCode);
+  };
+
   return (
     <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-ard-dark/90 backdrop-blur-md border-b border-white/10' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -34,8 +40,8 @@ export const NavBar: React.FC = () => {
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-8">
+          <div className="hidden md:flex items-center space-x-8">
+            <div className="flex items-baseline space-x-8">
               {['Music', 'Store', 'WiFi', 'Contact'].map((item) => (
                 <button
                   key={item}
@@ -45,14 +51,44 @@ export const NavBar: React.FC = () => {
                   {item}
                 </button>
               ))}
-              <Button variant="primary" size="sm" onClick={() => scrollTo('contact')}>
-                Book Now
-              </Button>
             </div>
+
+            {/* Currency Selector */}
+            <div className="relative flex items-center bg-black/40 rounded-lg px-2 border border-white/10">
+              <Globe className="w-4 h-4 text-gray-400 mr-2" />
+              <select 
+                value={currency} 
+                onChange={handleCurrencyChange}
+                className="bg-transparent text-sm text-gray-300 py-2 focus:outline-none cursor-pointer hover:text-white"
+              >
+                <option value="USD" className="bg-ard-dark">USD ($)</option>
+                <option value="TZS" className="bg-ard-dark">TZS (TSh)</option>
+                <option value="KES" className="bg-ard-dark">KES (KSh)</option>
+                <option value="UGX" className="bg-ard-dark">UGX (USh)</option>
+                <option value="GHS" className="bg-ard-dark">GHS (₵)</option>
+              </select>
+            </div>
+
+            <Button variant="primary" size="sm" onClick={() => scrollTo('contact')}>
+              Book Now
+            </Button>
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center gap-4">
+             {/* Mobile Currency Selector - Compact */}
+             <select 
+                value={currency} 
+                onChange={handleCurrencyChange}
+                className="bg-black/40 text-xs text-white py-1 px-2 rounded border border-white/10 focus:outline-none"
+              >
+                <option value="USD" className="bg-ard-dark">USD</option>
+                <option value="TZS" className="bg-ard-dark">TZS</option>
+                <option value="KES" className="bg-ard-dark">KES</option>
+                <option value="UGX" className="bg-ard-dark">UGX</option>
+                <option value="GHS" className="bg-ard-dark">GHS</option>
+              </select>
+
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none"

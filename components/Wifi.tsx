@@ -3,8 +3,11 @@ import { Section } from './Section';
 import { Button } from './Button';
 import { Wifi, Check, Zap } from 'lucide-react';
 import { WIFI_PLANS } from '../data/content';
+import { useCurrency } from '../context/CurrencyContext';
 
 export const WifiSection: React.FC = () => {
+  const { formatPrice } = useCurrency();
+
   return (
     <Section id="wifi" title="ARDBEATZ Connect" subtitle="High-speed internet solutions tailored for creators and businesses." darker>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -28,7 +31,7 @@ export const WifiSection: React.FC = () => {
             <div className="mb-8">
               <h3 className="text-xl font-bold text-white mb-2">{plan.name}</h3>
               <div className="flex items-baseline gap-1">
-                <span className="text-4xl font-bold text-white">{plan.price}</span>
+                <span className="text-4xl font-bold text-white">{formatPrice(plan.price)}</span>
                 <span className="text-gray-400">/month</span>
               </div>
               <div className="mt-4 flex items-center text-ard-accent">

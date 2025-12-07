@@ -199,7 +199,7 @@ export const WIFI_PLANS: WifiPlan[] = [
     id: 'basic',
     name: 'Streamer Starter',
     speed: '50 Mbps',
-    price: '$29',
+    price: 29, // Converted to number
     features: ['Unlimited Data', 'No Contracts', 'Standard Support', 'Ideal for Music Streaming'],
     recommended: false
   },
@@ -207,7 +207,7 @@ export const WIFI_PLANS: WifiPlan[] = [
     id: 'pro',
     name: 'Studio Pro',
     speed: '200 Mbps',
-    price: '$49',
+    price: 49, // Converted to number
     features: ['Unlimited Data', 'Low Latency for Collabs', 'Priority Support', 'Static IP Available', 'Free Installation'],
     recommended: true
   },
@@ -215,7 +215,7 @@ export const WIFI_PLANS: WifiPlan[] = [
     id: 'elite',
     name: 'Master Grade',
     speed: '1 Gbps',
-    price: '$89',
+    price: 89, // Converted to number
     features: ['Unlimited Data', 'Fiber Optic Speeds', '24/7 Dedicated Support', 'Mesh System Included', 'Lowest Ping'],
     recommended: false
   }

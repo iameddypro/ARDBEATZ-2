@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { X, CreditCard, Smartphone, Check, Copy, Loader2, Download, ExternalLink, Package } from 'lucide-react';
+import { X, CreditCard, Smartphone, Check, Copy, Loader2, Download, ExternalLink } from 'lucide-react';
 import { Beat, BeatPack } from '../types';
 import { Button } from './Button';
 import { SITE_CONFIG } from '../data/content';
+import { useCurrency } from '../context/CurrencyContext';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -13,6 +14,7 @@ interface PaymentModalProps {
 export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, product }) => {
   const [method, setMethod] = useState<'paypal' | 'mpesa'>('mpesa');
   const [copied, setCopied] = useState(false);
+  const { formatPrice, currency } = useCurrency();
   
   // Verification State
   const [transactionId, setTransactionId] = useState('');
@@ -87,6 +89,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pro
 
   // Construct PayPal Link
   const itemName = isPack ? `Pack: ${product.title}` : `${product.title} (License)`;
+  // PayPal typically requires base currency amount. Here we use USD.
   const paypalLink = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${SITE_CONFIG.payment.paypalEmail}&item_name=${encodeURIComponent(itemName)}&amount=${product.price}&currency_code=USD`;
 
   return (
@@ -178,7 +181,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pro
                       <p><span className="text-ard-primary font-bold">1.</span> Go to M-Pesa Menu &gt; Lipa na M-Pesa</p>
                       <p><span className="text-ard-primary font-bold">2.</span> Select Buy Goods / Send Money</p>
                       <p><span className="text-ard-primary font-bold">3.</span> Enter Number: <span className="font-mono text-white">{SITE_CONFIG.payment.mpesaNumber}</span></p>
-                      <p><span className="text-ard-primary font-bold">4.</span> Amount: <span className="font-mono text-white">${product.price}</span></p>
+                      <p><span className="text-ard-primary font-bold">4.</span> Amount: <span className="font-mono text-white text-lg">{formatPrice(product.price)}</span></p>
                       <p><span className="text-ard-primary font-bold">5.</span> Enter PIN and Confirm</p>
                     </div>
 
@@ -216,7 +219,12 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pro
                     </div>
                     <div>
                       <h4 className="text-lg font-bold text-white mb-2">Pay securely with PayPal</h4>
-                      <p className="text-gray-400 text-sm">You will be redirected to PayPal to complete your purchase of <b>${product.price}</b>.</p>
+                      <p className="text-gray-400 text-sm">
+                        You will be redirected to PayPal to complete your purchase.
+                        {currency !== 'USD' && (
+                          <span className="block mt-1 text-xs text-gray-500">Note: PayPal charges in USD (${product.price.toFixed(2)}).</span>
+                        )}
+                      </p>
                     </div>
                     <div className="space-y-3">
                         <a 
