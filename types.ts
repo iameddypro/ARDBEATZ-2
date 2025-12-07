@@ -22,7 +22,8 @@ export interface Beat {
   price: number;
   coverUrl: string;
   tags: string[];
-  audioUrl?: string; // In a real app, this would be the preview file URL
+  audioUrl?: string; // Legacy field
+  previewUrl?: string; // New field for audio preview
 }
 
 export interface WifiPlan {

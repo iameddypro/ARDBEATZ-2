@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Section } from './Section';
 import { Button } from './Button';
 import { Play, Pause, ShoppingCart, Music2, Tag } from 'lucide-react';
@@ -13,7 +13,9 @@ const BEATS: Beat[] = [
     key: 'Cm',
     price: 29.99,
     coverUrl: 'https://picsum.photos/seed/beat1/300/300',
-    tags: ['Trap', 'Dark', 'Hard']
+    tags: ['Trap', 'Dark', 'Hard'],
+    previewUrl: 'https://cdn.pixabay.com/audio/2022/03/24/audio_0656a2977d.mp3', // Lofi placeholder
+    audioUrl: 'https://cdn.pixabay.com/audio/2022/03/24/audio_0656a2977d.mp3'
   },
   {
     id: '2',
@@ -22,7 +24,9 @@ const BEATS: Beat[] = [
     key: 'G maj',
     price: 34.99,
     coverUrl: 'https://picsum.photos/seed/beat2/300/300',
-    tags: ['Afrobeat', 'Chill', 'Smooth']
+    tags: ['Afrobeat', 'Chill', 'Smooth'],
+    previewUrl: 'https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3', // Upbeat placeholder
+    audioUrl: 'https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3'
   },
   {
     id: '3',
@@ -31,7 +35,9 @@ const BEATS: Beat[] = [
     key: 'Fm',
     price: 29.99,
     coverUrl: 'https://picsum.photos/seed/beat3/300/300',
-    tags: ['Drill', 'UK', 'Aggressive']
+    tags: ['Drill', 'UK', 'Aggressive'],
+    previewUrl: 'https://cdn.pixabay.com/audio/2022/03/24/audio_0656a2977d.mp3',
+    audioUrl: 'https://cdn.pixabay.com/audio/2022/03/24/audio_0656a2977d.mp3'
   },
   {
     id: '4',
@@ -40,7 +46,9 @@ const BEATS: Beat[] = [
     key: 'Am',
     price: 49.99,
     coverUrl: 'https://picsum.photos/seed/beat4/300/300',
-    tags: ['Lo-Fi', 'R&B', 'Soul']
+    tags: ['Lo-Fi', 'R&B', 'Soul'],
+    previewUrl: 'https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3',
+    audioUrl: 'https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3'
   },
   {
     id: '5',
@@ -49,7 +57,9 @@ const BEATS: Beat[] = [
     key: 'C maj',
     price: 39.99,
     coverUrl: 'https://picsum.photos/seed/beat5/300/300',
-    tags: ['Bongo', 'Dance', 'Pop']
+    tags: ['Bongo', 'Dance', 'Pop'],
+    previewUrl: 'https://cdn.pixabay.com/audio/2022/03/24/audio_0656a2977d.mp3',
+    audioUrl: 'https://cdn.pixabay.com/audio/2022/03/24/audio_0656a2977d.mp3'
   },
   {
     id: '6',
@@ -58,7 +68,9 @@ const BEATS: Beat[] = [
     key: 'Dm',
     price: 29.99,
     coverUrl: 'https://picsum.photos/seed/beat6/300/300',
-    tags: ['Trap', 'Ethnic', 'Flute']
+    tags: ['Trap', 'Ethnic', 'Flute'],
+    previewUrl: 'https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3',
+    audioUrl: 'https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3'
   },
 ];
 
@@ -66,12 +78,58 @@ export const BeatStore: React.FC = () => {
   const [playingId, setPlayingId] = useState<string | null>(null);
   const [selectedBeat, setSelectedBeat] = useState<Beat | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Audio Playback Ref
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Cleanup audio on unmount
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
 
   const togglePlay = (id: string) => {
+    const beat = BEATS.find(b => b.id === id);
+    if (!beat) return;
+
+    // If clicking the currently playing beat, stop it
     if (playingId === id) {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
       setPlayingId(null);
     } else {
-      setPlayingId(id);
+      // If a new beat is clicked, stop previous one first
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+
+      // Play new beat
+      if (beat.previewUrl) {
+        const audio = new Audio(beat.previewUrl);
+        audio.volume = 0.7;
+        
+        // Reset state when audio ends
+        audio.onended = () => {
+          setPlayingId(null);
+        };
+
+        audio.play().catch(error => {
+          console.error("Error playing audio preview:", error);
+          setPlayingId(null);
+        });
+
+        audioRef.current = audio;
+        setPlayingId(id);
+      } else {
+        console.warn("No preview URL for this beat");
+      }
     }
   };
 
@@ -113,8 +171,8 @@ export const BeatStore: React.FC = () => {
                     )}
                   </button>
                   {playingId === beat.id && (
-                     <div className="absolute inset-0 flex items-center justify-center md:hidden pointer-events-none">
-                        <div className="w-8 h-8 rounded-full border-2 border-ard-primary animate-ping"></div>
+                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <div className="w-full h-full border-2 border-ard-primary rounded-lg animate-pulse"></div>
                      </div>
                   )}
                 </div>

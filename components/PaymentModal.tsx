@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, CreditCard, Smartphone, Check, Copy, Loader2 } from 'lucide-react';
+import { X, CreditCard, Smartphone, Check, Copy, Loader2, Download, ExternalLink } from 'lucide-react';
 import { Beat } from '../types';
 import { Button } from './Button';
 
@@ -41,6 +41,21 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, bea
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const triggerDownload = () => {
+    if (!beat) return;
+    const downloadUrl = beat.audioUrl || beat.previewUrl;
+    
+    if (downloadUrl) {
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = `${beat.title.replace(/\s+/g, '_')}_ARDBEATZ.mp3`;
+      link.target = '_blank'; // Opens in new tab if download is blocked, safer for cross-origin
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
   const handleVerify = () => {
     if (!transactionId.trim()) return;
     
@@ -50,7 +65,18 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, bea
     setTimeout(() => {
       setIsVerifying(false);
       setPaymentSuccess(true);
+      // Attempt auto-download after verification
+      setTimeout(triggerDownload, 500);
     }, 2000);
+  };
+
+  const handleManualPayPalSuccess = () => {
+    setIsVerifying(true);
+    setTimeout(() => {
+      setIsVerifying(false);
+      setPaymentSuccess(true);
+      setTimeout(triggerDownload, 500);
+    }, 1500);
   };
 
   // Construct PayPal Link
@@ -81,15 +107,22 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, bea
                </div>
                <h3 className="text-2xl font-bold text-white mb-2">Payment Verified!</h3>
                <p className="text-gray-300 mb-6">
-                 Your transaction <b>{transactionId}</b> has been confirmed. 
-                 We've sent the download link for <b>{beat.title}</b> to your email.
+                 Your purchase was successful. Your download should start automatically.
                </p>
-               <div className="bg-white/5 p-4 rounded-lg mb-6 text-sm text-gray-400">
-                  If you don't see the email within 5 minutes, please check your spam folder or contact support.
+               
+               <div className="space-y-3">
+                 <Button onClick={triggerDownload} className="w-full flex items-center justify-center gap-2" variant="primary">
+                   <Download className="w-5 h-5" />
+                   Download Now
+                 </Button>
+                 <Button onClick={onClose} className="w-full" variant="ghost">
+                   Back to Store
+                 </Button>
                </div>
-               <Button onClick={onClose} className="w-full">
-                 Back to Store
-               </Button>
+               
+               <div className="mt-4 text-xs text-gray-500">
+                  A receipt has been sent to your email.
+               </div>
             </div>
           ) : (
             <>
@@ -176,14 +209,31 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, bea
                       <h4 className="text-lg font-bold text-white mb-2">Pay securely with PayPal</h4>
                       <p className="text-gray-400 text-sm">You will be redirected to PayPal to complete your purchase of <b>${beat.price}</b>.</p>
                     </div>
-                    <a 
-                      href={paypalLink} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center w-full bg-[#0070BA] hover:bg-[#005ea6] text-white font-bold py-3 px-6 rounded-lg transition-colors"
-                    >
-                      Pay Now
-                    </a>
+                    <div className="space-y-3">
+                        <a 
+                        href={paypalLink} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center w-full bg-[#0070BA] hover:bg-[#005ea6] text-white font-bold py-3 px-6 rounded-lg transition-colors group"
+                        >
+                        Pay Now on PayPal
+                        <ExternalLink className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                        </a>
+                        
+                        <div className="relative py-2">
+                            <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-white/10"></span></div>
+                            <div className="relative flex justify-center text-xs uppercase"><span className="bg-ard-card px-2 text-gray-500">Then</span></div>
+                        </div>
+
+                        <Button 
+                            variant="outline"
+                            onClick={handleManualPayPalSuccess} 
+                            disabled={isVerifying}
+                            className="w-full text-sm"
+                        >
+                             {isVerifying ? 'Confirming...' : 'I have completed payment'}
+                        </Button>
+                    </div>
                   </div>
                 )}
               </div>
