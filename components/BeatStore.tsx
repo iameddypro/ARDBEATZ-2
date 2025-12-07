@@ -118,7 +118,7 @@ export const BeatStore: React.FC = () => {
               {BEATS.map((beat) => (
                 <div 
                   key={beat.id} 
-                  className={`group flex flex-col md:grid md:grid-cols-12 gap-4 p-4 items-center hover:bg-white/5 transition-colors ${playingId === beat.id ? 'bg-ard-primary/5' : ''}`}
+                  className={`group flex flex-col md:grid md:grid-cols-12 gap-4 p-4 items-center rounded-xl transition-all duration-300 hover:bg-white/5 hover:scale-[1.01] hover:shadow-lg hover:shadow-ard-primary/5 hover:z-10 relative ${playingId === beat.id ? 'bg-ard-primary/5' : ''}`}
                 >
                   {/* Title & Cover */}
                   <div className="col-span-5 flex items-center gap-4 w-full">
